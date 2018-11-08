@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
 import GamesLobby from './components/gameLobby'
 import SubmitUsername from './components/submitUsername'
+import SingleGame from './components/singleGame'
 import {me} from './store'
 
 /**
@@ -25,6 +26,7 @@ class Routes extends Component {
         <Route path="/signup" component={Signup} />
         <Route path="/home" component={GamesLobby} />
         <Route path="/lobby" component={GamesLobby} />
+        <Route path="/game/:id" component={SingleGame} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
