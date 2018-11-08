@@ -4,8 +4,9 @@ import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import players from './activePlayers'
+import allGames from './allGames'
 
-const reducer = combineReducers({user, players})
+const reducer = combineReducers({user, players, allGames})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

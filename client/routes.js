@@ -23,7 +23,7 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/home" component={SubmitUsername} />
+        <Route path="/home" component={GamesLobby} />
         <Route path="/lobby" component={GamesLobby} />
         {isLoggedIn && (
           <Switch>

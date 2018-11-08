@@ -6,8 +6,12 @@ const Game = db.define('games', {
   //   type: Sequelize.STRING,
   //   allowNull: false
   // },
-  participants: {
+  players: {
     type: Sequelize.ARRAY(Sequelize.STRING),
+    allowNull: false
+  },
+  host: {
+    type: Sequelize.STRING,
     allowNull: false
   },
   winners: {

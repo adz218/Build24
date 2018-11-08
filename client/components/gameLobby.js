@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import {createGameThunk, getGamesThunk} from '../store/allGames'
 
 class GameLobby extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class GameLobby extends Component {
   }
 
   componentDidMount() {
-    console.log('state at time of mount:', this.props.players)
+    console.log('thispropsuser', this.props.currentUser)
+    this.props.getGameList()
   }
 
   handleSubmit(event) {}
@@ -18,10 +20,18 @@ class GameLobby extends Component {
     return (
       <div>
         <h1>Lobby</h1>
+        <button onClick={() => this.props.createGame(this.props.currentUser)}>
+          Create a game
+        </button>
         <div>
-          {this.props.players.map(player => {
-            return <div>{player.username}</div>
-          })}
+          {this.props.games.length > 0 &&
+            this.props.games.map(game => {
+              return (
+                <div>
+                  <Link to={`/game/${game.id}`}>Game #: {game.id} </Link>
+                </div>
+              )
+            })}
         </div>
       </div>
     )
@@ -29,10 +39,15 @@ class GameLobby extends Component {
 }
 
 const mapState = state => ({
-  players: state.players
+  games: state.allGames, //just an array with all games
+  currentUser: state.user
 })
 
+const mapDispatch = dispatch => ({
+  createGame: player => dispatch(createGameThunk(player)),
+  getGameList: () => dispatch(getGamesThunk())
+})
 export default connect(
   mapState,
-  null
+  mapDispatch
 )(GameLobby)

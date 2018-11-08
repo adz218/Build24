@@ -12,7 +12,6 @@ export const addUserThunk = user => {
   return async dispatch => {
     try {
       const res = await axios.post('/api/players', user)
-      console.log('res data on store', res)
       dispatch(addUser(res.data))
     } catch (err) {
       console.log(err)

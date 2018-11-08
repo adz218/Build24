@@ -1,11 +1,10 @@
 const router = require('express').Router()
-const {User} = require('../db/models')
-const Player = require('../db/models/player')
+const Game = require('../db/models/AllGames')
 module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const players = Player.findAll()
+    const players = await Game.findAll()
     res.json(players)
   } catch (err) {
     next(err)
@@ -14,9 +13,10 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const newPlayer = await Player.create({username: req.body.username})
-    req.session.username = req.body.username
-    console.log('req session with username', req.session)
+    const newPlayer = await Game.create({
+      players: [req.body.email],
+      host: req.body.email
+    })
     res.json(newPlayer)
   } catch (err) {
     next(err)
