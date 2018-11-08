@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import {withRouter, Route, Switch} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import {Login, Signup, UserHome} from './components'
+import GamesLobby from './components/gameLobby'
+import SubmitUsername from './components/submitUsername'
 import {me} from './store'
 
 /**
@@ -21,10 +23,12 @@ class Routes extends Component {
         {/* Routes placed here are available to all visitors */}
         <Route path="/login" component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path="/home" component={SubmitUsername} />
+        <Route path="/lobby" component={GamesLobby} />
         {isLoggedIn && (
           <Switch>
             {/* Routes placed here are only available after logging in */}
-            <Route path="/home" component={UserHome} />
+            <Route path="/home" component={SubmitUsername} />
           </Switch>
         )}
         {/* Displays our Login component as a fallback */}
@@ -55,7 +59,12 @@ const mapDispatch = dispatch => {
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(connect(mapState, mapDispatch)(Routes))
+export default withRouter(
+  connect(
+    mapState,
+    mapDispatch
+  )(Routes)
+)
 
 /**
  * PROP TYPES
