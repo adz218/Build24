@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import socket from '../socket'
+import {addPlayerToGame} from '../store/singleGame'
+import store from '../store'
 
 class SingleGame extends Component {
   constructor(props) {
@@ -10,8 +12,11 @@ class SingleGame extends Component {
   }
 
   componentDidMount() {
-    socket.emit('newPlayer', this.props.activeGame)
-    console.log('thispropsplayers', this.props.players)
+    console.log('thispropsplayers at time of mount', this.props.players)
+    this.props.user.email &&
+      socket.emit('newPlayer', {
+        email: this.props.user.email
+      })
   }
 
   handleSubmit(event) {}
@@ -22,12 +27,12 @@ class SingleGame extends Component {
         <h1>please abide by the rules</h1>
         <div>
           <h2>participants:</h2>
-          {this.props.players.length > 0 &&
-            this.props.players.map(player => {
-              for (let prop in player) {
-                return <div>{prop}</div>
-              }
-            })}
+          <div>
+            {this.props.players.length > 0 &&
+              this.props.players.map(player => {
+                return <div>{player.email}</div>
+              })}
+          </div>
         </div>
       </div>
     )
@@ -35,7 +40,8 @@ class SingleGame extends Component {
 }
 const mapState = state => ({
   activeGame: state.singleGame,
-  players: state.players
+  players: state.singleGame.players,
+  user: state.user
 })
 export default connect(
   mapState,
