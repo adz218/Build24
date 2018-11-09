@@ -8,12 +8,14 @@ module.exports = io => {
       io.emit('newPlayer', backEndStore)
     })
 
-    socket.on('setCardsForRoom', (nums, suits) => {
-      let numsAndSuits = []
-      console.log('server receives this on creation:', nums, suits)
-      numsAndSuits.push(nums)
-      numsAndSuits.push(suits)
-      console.log('server sending this back to all clients', numsAndSuits)
+    socket.on('setGame', (nums, suits) => {
+      // console.log('server sending this back to all clients', numsAndSuits)
+      console.log('nums and suits', nums, suits)
+      io.emit('setGame', [...nums, ...suits])
+    })
+
+    socket.on('freshPlayer', () => {
+      console.log('nums and suits on fresh connect', numsAndSuits)
       io.emit('setCardsForRoom', numsAndSuits)
     })
 

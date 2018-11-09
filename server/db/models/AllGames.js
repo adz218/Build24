@@ -2,31 +2,17 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Game = db.define('games', {
-  // name: {
-  //   type: Sequelize.STRING,
-  //   allowNull: false
-  // },
   players: {
-    type: Sequelize.ARRAY(Sequelize.STRING),
-    allowNull: false
+    type: Sequelize.ARRAY(Sequelize.STRING)
   },
-  host: {
-    type: Sequelize.STRING,
-    allowNull: false
+  winner: {
+    type: Sequelize.STRING
   },
-  winners: {
-    type: Sequelize.STRING,
-    defaultValue: 'N/A',
-    validate: {
-      isIn: [['N/A', 'goodguys', 'badguys']]
-    }
+  numbers: {
+    type: Sequelize.ARRAY(Sequelize.INTEGER)
   },
-  stage: {
-    type: Sequelize.STRING,
-    defaultValue: 'waiting',
-    validate: {
-      isIn: [['waiting', 'active', 'finished']]
-    }
+  suits: {
+    type: Sequelize.ARRAY(Sequelize.INTEGER)
   }
 })
 

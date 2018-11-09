@@ -4,8 +4,8 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const players = await Game.findAll()
-    res.json(players)
+    const games = await Game.findAll()
+    res.json(games)
   } catch (err) {
     next(err)
   }
@@ -13,11 +13,8 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const newPlayer = await Game.create({
-      players: [req.body.email],
-      host: req.body.email
-    })
-    res.json(newPlayer)
+    const newGame = await Game.create(req.body)
+    res.json(newGame)
   } catch (err) {
     next(err)
   }

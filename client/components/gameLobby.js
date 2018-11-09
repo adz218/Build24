@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-import {createGameThunk, getGamesThunk} from '../store/allGames'
+// import {createGameThunk, getGamesThunk, createDBGame} from '../store/allGames'
+import {getCurrent, createGame, update} from '../store/game'
 import {Hand, Card, CardBack} from 'react-deck-o-cards'
 import {createCards} from '../store/singleGame'
 import socket from '../socket'
@@ -13,27 +14,21 @@ class GameLobby extends Component {
   }
 
   componentDidMount() {
-    this.props.getGameList()
-    console.log('new client on connect', this.props.activeGame)
-    // this.props.activeGame.length === 0 && socket.emit('freshPlayer')
+    this.props.getCurrentGame()
   }
 
   randomNums() {
     let cardNums = []
-    for (let i = 0; i < 4; i++) {
-      cardNums.push(Math.ceil(Math.random() * 10))
-    }
+    for (let i = 0; i < 4; i++) cardNums.push(Math.ceil(Math.random() * 10))
+
     return cardNums
   }
 
   randomSuits() {
     let cardSuits = []
-    for (let i = 0; i < 4; i++) {
-      cardSuits.push(Math.floor(Math.random() * 4))
-    }
+    for (let i = 0; i < 4; i++) cardSuits.push(Math.floor(Math.random() * 4))
     return cardSuits
   }
-  handleSubmit(event) {}
 
   render() {
     let numCopy = this.randomNums()
@@ -52,36 +47,42 @@ class GameLobby extends Component {
         <div />
         <button
           onClick={() => {
-            this.props.createGame(this.props.currentUser)
-            console.log('nums and suits on room creation', numCopy, suitCopy)
-            socket.emit('setCardsForRoom', numCopy, suitCopy)
+            this.props.createDBGame(numCopy, suitCopy)
+            this.props.getCurrentGame()
+            socket.emit(
+              'setGame',
+              this.props.game.numbers,
+              this.props.game.suits
+            )
           }}
         >
           Create/connect to game
         </button>
         <div>
-          <Hand
-            cards={[
-              {
-                rank: this.props.activeGame.numbers[0],
-                suit: this.props.activeGame.suits[0]
-              },
-              {
-                rank: this.props.activeGame.numbers[1],
-                suit: this.props.activeGame.suits[1]
-              },
-              {
-                rank: this.props.activeGame.numbers[2],
-                suit: this.props.activeGame.suits[2]
-              },
-              {
-                rank: this.props.activeGame.numbers[3],
-                suit: this.props.activeGame.suits[3]
-              }
-            ]}
-            hidden={false}
-            style={defHandStyle}
-          />
+          {this.props.game.numbers.length > 0 && (
+            <Hand
+              cards={[
+                {
+                  rank: this.props.game.numbers[0],
+                  suit: this.props.game.suits[0]
+                },
+                {
+                  rank: this.props.game.numbers[1],
+                  suit: this.props.game.suits[1]
+                },
+                {
+                  rank: this.props.game.numbers[2],
+                  suit: this.props.game.suits[2]
+                },
+                {
+                  rank: this.props.game.numbers[3],
+                  suit: this.props.game.suits[3]
+                }
+              ]}
+              hidden={false}
+              style={defHandStyle}
+            />
+          )}
         </div>
       </div>
     )
@@ -89,16 +90,13 @@ class GameLobby extends Component {
 }
 
 const mapState = state => ({
-  games: state.allGames, //just an array with all games
-  currentUser: state.user,
-  activeGame: state.singleGame
+  game: state.game
 })
 
 const mapDispatch = dispatch => ({
-  createGame: player => dispatch(createGameThunk(player)),
-  getGameList: () => dispatch(getGamesThunk())
-  // generateCards: (cardNums, cardSuits) =>
-  //   dispatch(createCards(cardNums, cardSuits))
+  getCurrentGame: () => dispatch(getCurrent()),
+  createDBGame: (nums, suits) => dispatch(createGame(nums, suits)),
+  updateAfterCreation: () => dispatch(update())
 })
 export default connect(
   mapState,
