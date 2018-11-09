@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize')
 const db = require('../db')
 
-const InGamePlayer = db.define('player', {
-  username: {
+const Player = db.define('player', {
+  email: {
     type: Sequelize.STRING,
     allowNull: false
   }
@@ -14,4 +14,4 @@ const InGamePlayer = db.define('player', {
   // }
 })
 
-module.exports = InGamePlayer
+module.exports = Player

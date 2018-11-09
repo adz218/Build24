@@ -4,8 +4,9 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 // import {createGameThunk, getGamesThunk, createDBGame} from '../store/allGames'
 import {getCurrent, createGame, update} from '../store/game'
+
+import {getPlayers, addPlayer} from '../store/players'
 import {Hand, Card, CardBack} from 'react-deck-o-cards'
-import {createCards} from '../store/singleGame'
 import socket from '../socket'
 
 class GameLobby extends Component {
@@ -13,14 +14,18 @@ class GameLobby extends Component {
     super(props)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.getCurrentGame()
+
+    await this.props.addPlayer({email: this.props.user.email || 'Guest Player'})
+    socket.emit('newPlayer')
+    this.props.getPlayersProp()
+    console.log('thispropsplayers', this.props.players)
   }
 
   randomNums() {
     let cardNums = []
     for (let i = 0; i < 4; i++) cardNums.push(Math.ceil(Math.random() * 10))
-
     return cardNums
   }
 
@@ -40,7 +45,7 @@ class GameLobby extends Component {
       maxWidth: '50vw',
       padding: 0
     }
-
+    console.log('thispropspalyers at render', this.props.players)
     return (
       <div>
         <h1>Lobby</h1>
@@ -62,7 +67,7 @@ class GameLobby extends Component {
             )
           }}
         >
-          Create/connect to game
+          Four New Cards
         </button>
         <div>
           {this.props.game.numbers.length > 0 && (
@@ -90,19 +95,31 @@ class GameLobby extends Component {
             />
           )}
         </div>
+        <div>Players:</div>
+        <div>
+          {this.props.players.length > 0 &&
+            this.props.players.map(player => {
+              return <div>{player.email}</div>
+            })}
+        </div>
       </div>
     )
   }
 }
 
 const mapState = state => ({
-  game: state.game
+  game: state.game,
+  user: state.user,
+  players: state.players
 })
 
 const mapDispatch = dispatch => ({
   getCurrentGame: () => dispatch(getCurrent()),
   createDBGame: (nums, suits) => dispatch(createGame(nums, suits)),
-  updateAfterCreation: () => dispatch(update())
+  updateAfterCreation: () => dispatch(update()),
+
+  addPlayer: email => dispatch(addPlayer(email)),
+  getPlayersProp: () => dispatch(getPlayers())
 })
 export default connect(
   mapState,

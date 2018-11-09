@@ -3,10 +3,10 @@ import createLogger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
-import players from './activePlayers'
+import players from './players'
 import game from './game'
 
-const reducer = combineReducers({user, game})
+const reducer = combineReducers({user, game, players})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )

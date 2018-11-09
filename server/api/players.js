@@ -5,7 +5,7 @@ module.exports = router
 
 router.get('/', async (req, res, next) => {
   try {
-    const players = Player.findAll()
+    const players = await Player.findAll()
     res.json(players)
   } catch (err) {
     next(err)
@@ -14,9 +14,7 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const newPlayer = await Player.create({username: req.body.username})
-    req.session.username = req.body.username
-    console.log('req session with username', req.session)
+    const newPlayer = await Player.create({email: req.body.email})
     res.json(newPlayer)
   } catch (err) {
     next(err)
