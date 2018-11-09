@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {createGameThunk, getGamesThunk} from '../store/allGames'
 import {Hand, Card, CardBack} from 'react-deck-o-cards'
+import {createCards} from '../store/singleGame'
+import socket from '../socket'
 
 class GameLobby extends Component {
   constructor(props) {
@@ -11,48 +13,75 @@ class GameLobby extends Component {
   }
 
   componentDidMount() {
-    console.log('thispropsuser', this.props.currentUser)
     this.props.getGameList()
-  }
-  randomCard() {
-    return Math.ceil(Math.random() * 10)
+    console.log('new client on connect', this.props.activeGame)
+    // this.props.activeGame.length === 0 && socket.emit('freshPlayer')
   }
 
-  randomSuit() {
-    return Math.floor(Math.random() * 4)
+  randomNums() {
+    let cardNums = []
+    for (let i = 0; i < 4; i++) {
+      cardNums.push(Math.ceil(Math.random() * 10))
+    }
+    return cardNums
+  }
+
+  randomSuits() {
+    let cardSuits = []
+    for (let i = 0; i < 4; i++) {
+      cardSuits.push(Math.floor(Math.random() * 4))
+    }
+    return cardSuits
   }
   handleSubmit(event) {}
 
   render() {
+    let numCopy = this.randomNums()
+    let suitCopy = this.randomSuits()
+
     const defHandStyle = {
       maxHeight: '34vh',
       minHeight: '34vh',
-
       maxWidth: '50vw',
       padding: 0
     }
+
     return (
       <div>
         <h1>Lobby</h1>
+        <div />
+        <button
+          onClick={() => {
+            this.props.createGame(this.props.currentUser)
+            console.log('nums and suits on room creation', numCopy, suitCopy)
+            socket.emit('setCardsForRoom', numCopy, suitCopy)
+          }}
+        >
+          Create/connect to game
+        </button>
         <div>
           <Hand
-            cards={[{rank: 1, suit: 0}]}
+            cards={[
+              {
+                rank: this.props.activeGame.numbers[0],
+                suit: this.props.activeGame.suits[0]
+              },
+              {
+                rank: this.props.activeGame.numbers[1],
+                suit: this.props.activeGame.suits[1]
+              },
+              {
+                rank: this.props.activeGame.numbers[2],
+                suit: this.props.activeGame.suits[2]
+              },
+              {
+                rank: this.props.activeGame.numbers[3],
+                suit: this.props.activeGame.suits[3]
+              }
+            ]}
             hidden={false}
             style={defHandStyle}
           />
-        </div>
-        <button onClick={() => this.props.createGame(this.props.currentUser)}>
-          Create a game
-        </button>
-        <div>
-          {this.props.games.length > 0 &&
-            this.props.games.map(game => {
-              return (
-                <div>
-                  <Link to={`/game/${game.id}`}>Game #: {game.id} </Link>
-                </div>
-              )
-            })}
         </div>
       </div>
     )
@@ -61,12 +90,15 @@ class GameLobby extends Component {
 
 const mapState = state => ({
   games: state.allGames, //just an array with all games
-  currentUser: state.user
+  currentUser: state.user,
+  activeGame: state.singleGame
 })
 
 const mapDispatch = dispatch => ({
   createGame: player => dispatch(createGameThunk(player)),
   getGameList: () => dispatch(getGamesThunk())
+  // generateCards: (cardNums, cardSuits) =>
+  //   dispatch(createCards(cardNums, cardSuits))
 })
 export default connect(
   mapState,
