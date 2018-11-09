@@ -2,10 +2,10 @@ module.exports = io => {
   io.on('connection', socket => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
-    socket.on('newPlayer', (newPlayer, gameState) => {
+    socket.on('newPlayer', newPlayer => {
       backEndStore.push(newPlayer)
       console.log('backendstore after a push', backEndStore)
-      socket.emit('newPlayer', backEndStore)
+      io.emit('newPlayer', backEndStore)
     })
 
     socket.on('disconnect', () => {
