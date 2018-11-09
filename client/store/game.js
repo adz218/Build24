@@ -9,7 +9,7 @@ const initialState = {numbers: [], suits: []}
 
 const getGames = games => ({type: GET_GAME, games})
 const createGameCreator = game => ({type: CREATE_GAME, game})
-export const setGame = arr => ({type: SET_GAME, numsAndSuits})
+export const setGame = arr => ({type: SET_GAME, arr})
 
 export const getCurrent = () => {
   return async dispatch => {
@@ -45,9 +45,8 @@ export default function(state = initialState, action) {
       return {...state, numbers: action.game.numbers, suits: action.game.suits}
     case SET_GAME:
       return {
-        ...state,
-        numbers: action.numsAndSuits.numbers,
-        suits: action.numsAndSuits.suits
+        numbers: action.arr[0],
+        suits: action.arr[1]
       }
     default:
       return state

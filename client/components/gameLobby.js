@@ -46,9 +46,15 @@ class GameLobby extends Component {
         <h1>Lobby</h1>
         <div />
         <button
-          onClick={() => {
-            this.props.createDBGame(numCopy, suitCopy)
-            this.props.getCurrentGame()
+          onClick={async () => {
+            await this.props.createDBGame(numCopy, suitCopy)
+            console.log(
+              'onclick sending out to socket',
+              this.props.game.numbers,
+              this.props.game.suits
+            )
+            await this.props.getCurrentGame()
+
             socket.emit(
               'setGame',
               this.props.game.numbers,

@@ -11,12 +11,7 @@ module.exports = io => {
     socket.on('setGame', (nums, suits) => {
       // console.log('server sending this back to all clients', numsAndSuits)
       console.log('nums and suits', nums, suits)
-      io.emit('setGame', [...nums, ...suits])
-    })
-
-    socket.on('freshPlayer', () => {
-      console.log('nums and suits on fresh connect', numsAndSuits)
-      io.emit('setCardsForRoom', numsAndSuits)
+      io.emit('setGame', [[...nums], [...suits]])
     })
 
     socket.on('disconnect', () => {

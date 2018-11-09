@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 const socket = io(window.location.origin)
 import store from './store'
-import {setCards} from './store/game'
+import {setGame} from './store/game'
 
 socket.on('connect', () => {
   console.log('Connected!')
@@ -11,7 +11,7 @@ socket.on('connect', () => {
 
   socket.on('setGame', numsAndSuits => {
     console.log('client listener hit', numsAndSuits)
-    store.dispatch(setCards(numsAndSuits))
+    store.dispatch(setGame(numsAndSuits))
   })
 })
 
