@@ -3,7 +3,7 @@ module.exports = io => {
     console.log(`A socket connection to the server has been made: ${socket.id}`)
 
     socket.on('newPlayer', newPlayer => {
-      backEndStore.push(newPlayer)
+      if (backEndStore.length < 5) backEndStore.push(newPlayer)
       console.log('backendstore after a push', backEndStore)
       io.emit('newPlayer', backEndStore)
     })

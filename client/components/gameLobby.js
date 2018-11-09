@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 import {createGameThunk, getGamesThunk} from '../store/allGames'
+import {Hand, Card, CardBack} from 'react-deck-o-cards'
 
 class GameLobby extends Component {
   constructor(props) {
@@ -13,13 +14,33 @@ class GameLobby extends Component {
     console.log('thispropsuser', this.props.currentUser)
     this.props.getGameList()
   }
+  randomCard() {
+    return Math.ceil(Math.random() * 10)
+  }
 
+  randomSuit() {
+    return Math.floor(Math.random() * 4)
+  }
   handleSubmit(event) {}
 
   render() {
+    const defHandStyle = {
+      maxHeight: '34vh',
+      minHeight: '34vh',
+
+      maxWidth: '50vw',
+      padding: 0
+    }
     return (
       <div>
         <h1>Lobby</h1>
+        <div>
+          <Hand
+            cards={[{rank: 1, suit: 0}]}
+            hidden={false}
+            style={defHandStyle}
+          />
+        </div>
         <button onClick={() => this.props.createGame(this.props.currentUser)}>
           Create a game
         </button>
