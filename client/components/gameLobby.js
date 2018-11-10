@@ -8,7 +8,14 @@ import {getCurrent, createGame, update} from '../store/game'
 import {getPlayers, addPlayer} from '../store/players'
 import {Hand, Card, CardBack} from 'react-deck-o-cards'
 import socket from '../socket'
-import {Modal, Button, Icon} from 'react-materialize'
+import {
+  Modal,
+  Button,
+  Icon,
+  Collection,
+  CollectionItem,
+  Table
+} from 'react-materialize'
 
 class GameLobby extends Component {
   constructor(props) {
@@ -49,7 +56,6 @@ class GameLobby extends Component {
     console.log('thispropspalyers at render', this.props.players)
     return (
       <div>
-        <h1>Lobby</h1>
         <div />
         <div className="buttons-bar">
           <Button
@@ -72,7 +78,16 @@ class GameLobby extends Component {
             Four New Cards
           </Button>
           <Modal trigger={<Button>Rules</Button>}>
-            <p>Rules for 24</p>
+            <p>
+              Rules:
+              <br />
+              Create the number 24 with the four randomly generated cards. You
+              may use the cards in any order and apply any of the basic
+              mathematic operators (addition, subtraction, multiplication,
+              division) but each card must be used exactly once. <br />
+              Aces can be used as either 1 or 11. <br />
+              Note: Not all sets can be refactored into 24. <br />
+            </p>
           </Modal>
         </div>
         <div>
@@ -103,13 +118,21 @@ class GameLobby extends Component {
             </div>
           )}
         </div>
-        <div>Players:</div>
-        <div>
-          {this.props.players.length > 0 &&
-            this.props.players.map(player => {
-              return <div>{player.email}</div>
-            })}
-        </div>
+        <Table>
+          <thead>
+            <tr>Player:</tr>
+          </thead>
+          <tbody>
+            {this.props.players.length > 0 &&
+              this.props.players.map(player => {
+                return (
+                  <tr>
+                    <td>{player.email}</td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </Table>
       </div>
     )
   }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
-import {Navbar} from 'react-materialize'
+import {Navbar, NavItem, Button} from 'react-materialize'
 
 const NavbarContainer = ({handleClick, isLoggedIn}) => (
   <div>
@@ -11,7 +11,6 @@ const NavbarContainer = ({handleClick, isLoggedIn}) => (
     <nav>
       {isLoggedIn ? (
         <div>
-          {/* The navbar will show these links after you log in */}
           <Link to="/home">Home</Link>
           <a href="#" onClick={handleClick}>
             Logout
