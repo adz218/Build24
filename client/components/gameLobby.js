@@ -8,6 +8,7 @@ import {getCurrent, createGame, update} from '../store/game'
 import {getPlayers, addPlayer} from '../store/players'
 import {Hand, Card, CardBack} from 'react-deck-o-cards'
 import socket from '../socket'
+import {Modal, Button, Icon} from 'react-materialize'
 
 class GameLobby extends Component {
   constructor(props) {
@@ -50,49 +51,56 @@ class GameLobby extends Component {
       <div>
         <h1>Lobby</h1>
         <div />
-        <button
-          onClick={async () => {
-            await this.props.createDBGame(numCopy, suitCopy)
-            console.log(
-              'onclick sending out to socket',
-              this.props.game.numbers,
-              this.props.game.suits
-            )
-            await this.props.getCurrentGame()
+        <div className="buttons-bar">
+          <Button
+            onClick={async () => {
+              await this.props.createDBGame(numCopy, suitCopy)
+              console.log(
+                'onclick sending out to socket',
+                this.props.game.numbers,
+                this.props.game.suits
+              )
+              await this.props.getCurrentGame()
 
-            socket.emit(
-              'setGame',
-              this.props.game.numbers,
-              this.props.game.suits
-            )
-          }}
-        >
-          Four New Cards
-        </button>
+              socket.emit(
+                'setGame',
+                this.props.game.numbers,
+                this.props.game.suits
+              )
+            }}
+          >
+            Four New Cards
+          </Button>
+          <Modal trigger={<Button>Rules</Button>}>
+            <p>Rules for 24</p>
+          </Modal>
+        </div>
         <div>
           {this.props.game.numbers.length > 0 && (
-            <Hand
-              cards={[
-                {
-                  rank: this.props.game.numbers[0],
-                  suit: this.props.game.suits[0]
-                },
-                {
-                  rank: this.props.game.numbers[1],
-                  suit: this.props.game.suits[1]
-                },
-                {
-                  rank: this.props.game.numbers[2],
-                  suit: this.props.game.suits[2]
-                },
-                {
-                  rank: this.props.game.numbers[3],
-                  suit: this.props.game.suits[3]
-                }
-              ]}
-              hidden={false}
-              style={defHandStyle}
-            />
+            <div>
+              <Hand
+                cards={[
+                  {
+                    rank: this.props.game.numbers[0],
+                    suit: this.props.game.suits[0]
+                  },
+                  {
+                    rank: this.props.game.numbers[1],
+                    suit: this.props.game.suits[1]
+                  },
+                  {
+                    rank: this.props.game.numbers[2],
+                    suit: this.props.game.suits[2]
+                  },
+                  {
+                    rank: this.props.game.numbers[3],
+                    suit: this.props.game.suits[3]
+                  }
+                ]}
+                hidden={false}
+                style={defHandStyle}
+              />
+            </div>
           )}
         </div>
         <div>Players:</div>

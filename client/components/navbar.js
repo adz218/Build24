@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {logout} from '../store'
+import {Navbar} from 'react-materialize'
 
-const Navbar = ({handleClick, isLoggedIn}) => (
+const NavbarContainer = ({handleClick, isLoggedIn}) => (
   <div>
     <h1>Build 24</h1>
     <nav>
@@ -49,12 +50,12 @@ const mapDispatch = dispatch => {
 export default connect(
   mapState,
   mapDispatch
-)(Navbar)
+)(NavbarContainer)
 
 /**
  * PROP TYPES
  */
-Navbar.propTypes = {
+NavbarContainer.propTypes = {
   handleClick: PropTypes.func.isRequired,
   isLoggedIn: PropTypes.bool.isRequired
 }
