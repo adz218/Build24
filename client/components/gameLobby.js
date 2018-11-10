@@ -91,6 +91,42 @@ class GameLobby extends Component {
           </Modal>
         </div>
         <div>
+          <svg viewBox="-2 -2 474 182" style={defHandStyle}>
+            <Card
+              rank={this.props.game.numbers[0]}
+              suit={this.props.game.suits[0]}
+              cardWidth="170"
+              cardHeight="158"
+              xOffset={0}
+              yOffset={20}
+            />
+            <Card
+              rank={this.props.game.numbers[1]}
+              suit={this.props.game.suits[1]}
+              cardWidth="170"
+              cardHeight="158"
+              xOffset={100}
+              yOffset={20}
+            />
+            <Card
+              rank={this.props.game.numbers[2]}
+              suit={this.props.game.suits[2]}
+              cardWidth="170"
+              cardHeight="158"
+              xOffset={200}
+              yOffset={20}
+            />
+            <Card
+              rank={this.props.game.numbers[3]}
+              suit={this.props.game.suits[3]}
+              cardWidth="170"
+              cardHeight="158"
+              xOffset={300}
+              yOffset={20}
+            />
+          </svg>
+        </div>
+        <div>
           {this.props.game.numbers.length > 0 && (
             <div>
               <Hand
