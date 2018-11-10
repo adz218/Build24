@@ -5,7 +5,7 @@ const CREATE_GAME = 'CREATE_GAME'
 const GET_GAME = 'GET_GAME'
 const SET_GAME = 'SET_GAME'
 
-const initialState = {numbers: [], suits: []}
+const initialState = {numbers: [], suits: [], gameId: ''}
 
 const getGames = games => ({type: GET_GAME, games})
 const createGameCreator = game => ({type: CREATE_GAME, game})
@@ -34,17 +34,29 @@ export const createGame = (numbers, suits) => {
   }
 }
 
+export const addSolution = solution => {
+  return async dispatch => {
+    try {
+      const solvedGame = await axios.put('api/games')
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_GAME:
       return {
         numbers: action.games[action.games.length - 1].numbers,
-        suits: action.games[action.games.length - 1].suits
+        suits: action.games[action.games.length - 1].suits,
+        gameId: action.games[action.games.length - 1].id
       }
     case CREATE_GAME:
       return {...state, numbers: action.game.numbers, suits: action.game.suits}
     case SET_GAME:
       return {
+        ...state,
         numbers: action.arr[0],
         suits: action.arr[1]
       }

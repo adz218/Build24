@@ -7,6 +7,12 @@ const Game = db.define('games', {
   },
   suits: {
     type: Sequelize.ARRAY(Sequelize.INTEGER)
+  },
+  solution: {
+    type: Sequelize.STRING
+  },
+  winner: {
+    type: Sequelize.STRING
   }
 })
 

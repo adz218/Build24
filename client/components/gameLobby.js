@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
 // import {createGameThunk, getGamesThunk, createDBGame} from '../store/allGames'
-import {getCurrent, createGame, update} from '../store/game'
-
+import {getCurrent, createGame, update, addSolution} from '../store/game'
 import {getPlayers, addPlayer} from '../store/players'
 import {Hand, Card, CardBack} from 'react-deck-o-cards'
 import socket from '../socket'
@@ -20,6 +19,13 @@ import {
 class GameLobby extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      solution: ''
+    }
+
+    this.addToState = this.addToState.bind(this)
+    this.clearState = this.clearState.bind(this)
+    this.submitSolution = this.submitSolution.bind(this)
   }
 
   async componentDidMount() {
@@ -43,6 +49,25 @@ class GameLobby extends Component {
     return cardSuits
   }
 
+  addToState(num) {
+    this.setState({
+      solution: this.state.solution + num + ' '
+    })
+  }
+
+  clearState() {
+    this.setState({
+      solution: ''
+    })
+  }
+
+  submitSolution() {
+    const solution = eval(this.state.solution)
+    console.log('YOUR SOLUTION EVALUTES TO:', solution)
+    if (solution === 24) {
+      this.props.addSolutionToGameDB(this.state.solution)
+    }
+  }
   render() {
     let numCopy = this.randomNums()
     let suitCopy = this.randomSuits()
@@ -56,7 +81,6 @@ class GameLobby extends Component {
     console.log('thispropspalyers at render', this.props.players)
     return (
       <div>
-        <div />
         <div className="buttons-bar">
           <Button
             onClick={async () => {
@@ -90,69 +114,75 @@ class GameLobby extends Component {
             </p>
           </Modal>
         </div>
-        <div>
-          <svg viewBox="-2 -2 474 182" style={defHandStyle}>
-            <Card
-              rank={this.props.game.numbers[0]}
-              suit={this.props.game.suits[0]}
-              cardWidth="170"
-              cardHeight="158"
-              xOffset={0}
-              yOffset={20}
-            />
-            <Card
-              rank={this.props.game.numbers[1]}
-              suit={this.props.game.suits[1]}
-              cardWidth="170"
-              cardHeight="158"
-              xOffset={100}
-              yOffset={20}
-            />
-            <Card
-              rank={this.props.game.numbers[2]}
-              suit={this.props.game.suits[2]}
-              cardWidth="170"
-              cardHeight="158"
-              xOffset={200}
-              yOffset={20}
-            />
-            <Card
-              rank={this.props.game.numbers[3]}
-              suit={this.props.game.suits[3]}
-              cardWidth="170"
-              cardHeight="158"
-              xOffset={300}
-              yOffset={20}
-            />
-          </svg>
-        </div>
-        <div>
+        <div className="cards-carousel">
           {this.props.game.numbers.length > 0 && (
-            <div>
-              <Hand
-                cards={[
-                  {
-                    rank: this.props.game.numbers[0],
-                    suit: this.props.game.suits[0]
-                  },
-                  {
-                    rank: this.props.game.numbers[1],
-                    suit: this.props.game.suits[1]
-                  },
-                  {
-                    rank: this.props.game.numbers[2],
-                    suit: this.props.game.suits[2]
-                  },
-                  {
-                    rank: this.props.game.numbers[3],
-                    suit: this.props.game.suits[3]
-                  }
-                ]}
-                hidden={false}
-                style={defHandStyle}
+            <svg viewBox="-2 -2 474 182" style={defHandStyle}>
+              <Card
+                rank={this.props.game.numbers[0]}
+                suit={this.props.game.suits[0]}
+                cardWidth="170"
+                cardHeight="158"
+                xOffset={0}
+                yOffset={20}
+                onClick={() => {
+                  this.addToState(this.props.game.numbers[0])
+                }}
               />
-            </div>
+              <Card
+                rank={this.props.game.numbers[1]}
+                suit={this.props.game.suits[1]}
+                cardWidth="170"
+                cardHeight="158"
+                xOffset={100}
+                yOffset={20}
+                onClick={() => {
+                  this.addToState(this.props.game.numbers[1])
+                }}
+              />
+              <Card
+                rank={this.props.game.numbers[2]}
+                suit={this.props.game.suits[2]}
+                cardWidth="170"
+                cardHeight="158"
+                xOffset={200}
+                yOffset={20}
+                onClick={() => {
+                  this.addToState(this.props.game.numbers[2])
+                }}
+              />
+              <Card
+                rank={this.props.game.numbers[3]}
+                suit={this.props.game.suits[3]}
+                cardWidth="170"
+                cardHeight="158"
+                xOffset={300}
+                yOffset={20}
+                onClick={() => {
+                  this.addToState(this.props.game.numbers[3])
+                }}
+              />
+            </svg>
           )}
+        </div>
+        <div className="solution-field">
+          <input
+            type="text"
+            name="solution"
+            value={this.state.solution}
+            placeholder="use buttons to fill"
+          />
+        </div>
+        <div className="buttons-bar">
+          <Button onClick={() => this.addToState('+')}>+</Button>
+          <Button onClick={() => this.addToState('-')}>-</Button>
+          <Button onClick={() => this.addToState('*')}>*</Button>
+          <Button onClick={() => this.addToState('/')}>/</Button>
+          <Button onClick={() => this.addToState('(')}>(</Button>
+          <Button onClick={() => this.addToState(')')}>)</Button>
+        </div>
+        <div className="buttons-bar">
+          <Button onClick={() => this.submitSolution()}>Submit Solution</Button>
+          <Button onClick={() => this.clearState()}>Clear Solution</Button>
         </div>
         <Table>
           <thead>
@@ -186,7 +216,9 @@ const mapDispatch = dispatch => ({
   updateAfterCreation: () => dispatch(update()),
 
   addPlayer: email => dispatch(addPlayer(email)),
-  getPlayersProp: () => dispatch(getPlayers())
+  getPlayersProp: () => dispatch(getPlayers()),
+
+  addSolutionToGameDB: solution => dispatch(addSolution(solution))
 })
 export default connect(
   mapState,
