@@ -26,6 +26,7 @@ class GameLobby extends Component {
     this.addToState = this.addToState.bind(this)
     this.clearState = this.clearState.bind(this)
     this.submitSolution = this.submitSolution.bind(this)
+    this.openModal = this.openModal.bind(this)
   }
 
   async componentDidMount() {
@@ -61,13 +62,54 @@ class GameLobby extends Component {
     })
   }
 
-  submitSolution() {
-    const solution = eval(this.state.solution)
-    console.log('YOUR SOLUTION EVALUTES TO:', solution)
-    if (solution === 24) {
-      this.props.addSolutionToGameDB(this.state.solution)
-    }
+  async openModal() {
+    $('#solved').modal('open')
+    // let numCopy = this.randomNums()
+    // let suitCopy = this.randomSuits()
+    // await this.props.createDBGame(numCopy, suitCopy)
+    // await this.props.getCurrentGame()
+    // socket.emit('setGame', this.props.game.numbers, this.props.game.suits)
   }
+
+  async submitSolution() {
+    const solution = eval(this.state.solution)
+
+    const numbersCopy = [...this.props.game.numbers]
+    const solutionCopy = this.state.solution.split(' ')
+
+    console.log('numcopy and solcopy', numbersCopy, solutionCopy)
+
+    let parsedIntsCount = 0
+    let bool
+    for (let i = 0; i < solutionCopy.length; i++) {
+      if (numbersCopy.indexOf(parseInt(solutionCopy[i])) !== -1) {
+        if (parsedIntsCount < 4) {
+          parsedIntsCount += 1
+          numbersCopy.splice(numbersCopy.indexOf(parseInt(solutionCopy[i])), 1)
+        } else {
+          bool = false
+        }
+      }
+    }
+
+    console.log('numcopy after check', numbersCopy, parsedIntsCount)
+
+    if (solution === 24 && numbersCopy.length === 0 && bool) {
+      await this.props.addSolutionToGameDB(
+        this.state.solution,
+        this.props.game.id,
+        this.props.user.email || 'Guest Player'
+      )
+      socket.emit(
+        'winner',
+        this.props.user.email || 'Guest Player',
+        this.state.solution
+      )
+    }
+
+    console.log('dont be cheatin now')
+  }
+
   render() {
     let numCopy = this.randomNums()
     let suitCopy = this.randomSuits()
@@ -78,20 +120,21 @@ class GameLobby extends Component {
       maxWidth: '50vw',
       padding: 0
     }
-    console.log('thispropspalyers at render', this.props.players)
+
     return (
       <div>
+        {this.props.game.winner !== '' && this.props.game.winner !== null && (
+          <div>
+            {this.props.game.winner} solved it with the solution:
+            {this.props.game.solution}
+          </div>
+        )}
         <div className="buttons-bar">
           <Button
             onClick={async () => {
               await this.props.createDBGame(numCopy, suitCopy)
-              console.log(
-                'onclick sending out to socket',
-                this.props.game.numbers,
-                this.props.game.suits
-              )
               await this.props.getCurrentGame()
-
+              this.clearState()
               socket.emit(
                 'setGame',
                 this.props.game.numbers,
@@ -101,10 +144,8 @@ class GameLobby extends Component {
           >
             Four New Cards
           </Button>
-          <Modal trigger={<Button>Rules</Button>}>
+          <Modal trigger={<Button>Rules</Button>} header="Rules:">
             <p>
-              Rules:
-              <br />
               Create the number 24 with the four randomly generated cards. You
               may use the cards in any order and apply any of the basic
               mathematic operators (addition, subtraction, multiplication,
@@ -169,7 +210,7 @@ class GameLobby extends Component {
             type="text"
             name="solution"
             value={this.state.solution}
-            placeholder="use buttons to fill"
+            placeholder="Click on the cards and use the buttons below to come up with a solution!"
           />
         </div>
         <div className="buttons-bar">
@@ -218,7 +259,8 @@ const mapDispatch = dispatch => ({
   addPlayer: email => dispatch(addPlayer(email)),
   getPlayersProp: () => dispatch(getPlayers()),
 
-  addSolutionToGameDB: solution => dispatch(addSolution(solution))
+  addSolutionToGameDB: (solution, gameId, email) =>
+    dispatch(addSolution(solution, gameId, email))
 })
 export default connect(
   mapState,
