@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import MessageForm from './messageForm'
+import MessageLog from './messageLog'
 // import {createGameThunk, getGamesThunk, createDBGame} from '../store/allGames'
 import {getCurrent, createGame, update, addSolution} from '../store/game'
 import {getPlayers, addPlayer} from '../store/players'
@@ -11,9 +13,9 @@ import {
   Modal,
   Button,
   Icon,
-  Collection,
-  CollectionItem,
-  Table
+  Table,
+  Card as MatCard,
+  Col
 } from 'react-materialize'
 
 class GameLobby extends Component {
@@ -50,20 +52,16 @@ class GameLobby extends Component {
   }
 
   addToState(num) {
-    this.setState({
-      solution: this.state.solution + num + ' '
-    })
+    this.setState({solution: this.state.solution + num + ' '})
   }
 
   clearState() {
-    this.setState({
-      solution: ''
-    })
+    this.setState({solution: ''})
   }
 
-  async openModal() {
-    $('#solved').modal('open')
-  }
+  // async openModal() {
+  //   $('#solved').modal('open')
+  // }
 
   async submitSolution() {
     const solution = eval(this.state.solution)
@@ -80,16 +78,10 @@ class GameLobby extends Component {
         if (parsedIntsCount < 4) {
           parsedIntsCount += 1
           numbersCopy.splice(numbersCopy.indexOf(parseInt(solutionCopy[i])), 1)
-        } else {
-          console.log()
-          bool = false
-          //check
         }
+        bool = false
       }
     }
-
-    console.log('numcopy after check', numbersCopy, parsedIntsCount)
-
     if (solution === 24 && numbersCopy.length === 0 && bool) {
       await this.props.addSolutionToGameDB(
         this.state.solution,
@@ -222,21 +214,15 @@ class GameLobby extends Component {
           <Button onClick={() => this.submitSolution()}>Submit Solution</Button>
           <Button onClick={() => this.clearState()}>Clear Solution</Button>
         </div>
-        <Table>
-          <thead>
-            <tr>Player:</tr>
-          </thead>
-          <tbody>
-            {this.props.players.length > 0 &&
-              this.props.players.map(player => {
-                return (
-                  <tr>
-                    <td>{player.email}</td>
-                  </tr>
-                )
-              })}
-          </tbody>
-        </Table>
+
+        <div>
+          <Col m={12} s={12}>
+            <MatCard className="teal lighten-4 black-text" title="Message Log">
+              <MessageLog />
+              <MessageForm />
+            </MatCard>
+          </Col>
+        </div>
       </div>
     )
   }

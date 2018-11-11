@@ -3,6 +3,7 @@ const socket = io(window.location.origin)
 import store from './store'
 import {setGame, setWinner, clearState} from './store/game'
 import {getPlayers} from './store/players'
+import {addMessage} from './store/messages'
 
 socket.on('connect', () => {
   console.log('Connected!')
@@ -18,6 +19,11 @@ socket.on('connect', () => {
   socket.on('newPlayer', () => {
     console.log('client listener hit for new player')
     store.dispatch(getPlayers())
+  })
+
+  socket.on('send-message', msgAndUser => {
+    console.log('new msg received from a client', msgAndUser)
+    store.dispatch(addMessage(msgAndUser))
   })
 
   socket.on('winner', winnerAndSoln => {

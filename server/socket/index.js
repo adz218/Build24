@@ -21,6 +21,10 @@ module.exports = io => {
       io.emit('clearState')
     })
 
+    socket.on('send-message', messageAndUser => {
+      io.emit('send-message', messageAndUser)
+    })
+
     socket.on('disconnect', () => {
       console.log(`Connection ${socket.id} has left the building`)
     })

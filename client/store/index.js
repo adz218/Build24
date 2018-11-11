@@ -5,8 +5,9 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import user from './user'
 import players from './players'
 import game from './game'
+import messages from './messages'
 
-const reducer = combineReducers({user, game, players})
+const reducer = combineReducers({user, game, players, messages})
 const middleware = composeWithDevTools(
   applyMiddleware(thunkMiddleware, createLogger({collapsed: true}))
 )
