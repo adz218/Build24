@@ -134,14 +134,60 @@ class GameLobby extends Component {
             Four New Cards
           </Button>
           <Modal trigger={<Button>Rules</Button>} header="Rules:">
-            <p>
+            <div>
               Create the number 24 with the four randomly generated cards. You
               may use the cards in any order and apply any of the basic
               mathematic operators (addition, subtraction, multiplication,
               division) but each card must be used exactly once. <br />
-              Aces can be used as either 1 or 11. <br />
-              Note: Not all sets can be refactored into 24. <br />
-            </p>
+              <br />
+              Note: Aces count as 1 and not all sets can be combined into 24.
+              <br />
+              <br />
+              Example:
+              <br />
+              <svg viewBox="-2 -2 474 182" style={defHandStyle}>
+                <Card
+                  rank={5}
+                  suit={1}
+                  cardWidth="170"
+                  cardHeight="158"
+                  xOffset={0}
+                  yOffset={20}
+                />
+                <Card
+                  rank={4}
+                  suit={2}
+                  cardWidth="170"
+                  cardHeight="158"
+                  xOffset={100}
+                  yOffset={20}
+                />
+                <Card
+                  rank={1}
+                  suit={2}
+                  cardWidth="170"
+                  cardHeight="158"
+                  xOffset={200}
+                  yOffset={20}
+                />
+                <Card
+                  rank={3}
+                  suit={3}
+                  cardWidth="170"
+                  cardHeight="158"
+                  xOffset={300}
+                  yOffset={20}
+                />
+              </svg>
+              <p>
+                {' '}
+                Valid Solutions: <br />
+                5 * 4 + 1 + 3 <br />
+                (5 + 3) * (4 - 1) <br />
+                Invalid Solution: <br />
+                (5 * 3) + 4 + 1 + 4 <br />
+              </p>
+            </div>
           </Modal>
         </div>
         <div className="cards-carousel">
