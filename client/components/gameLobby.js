@@ -80,7 +80,7 @@ class GameLobby extends Component {
     console.log('numcopy and solcopy', numbersCopy, solutionCopy)
 
     let parsedIntsCount = 0
-    let bool
+    let bool = true
     for (let i = 0; i < solutionCopy.length; i++) {
       if (numbersCopy.indexOf(parseInt(solutionCopy[i])) !== -1) {
         if (parsedIntsCount < 4) {
