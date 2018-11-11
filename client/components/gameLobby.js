@@ -135,7 +135,7 @@ class GameLobby extends Component {
           </Button>
           <Modal trigger={<Button>Rules</Button>} header="Rules:">
             <div>
-              Create the number 24 with the four randomly generated cards. You
+              Build the number 24 with the four randomly generated cards. You
               may use the cards in any order and apply any of the basic
               mathematic operators (addition, subtraction, multiplication,
               division) but each card must be used exactly once. <br />
