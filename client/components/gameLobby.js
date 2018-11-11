@@ -26,7 +26,6 @@ class GameLobby extends Component {
     this.addToState = this.addToState.bind(this)
     this.clearState = this.clearState.bind(this)
     this.submitSolution = this.submitSolution.bind(this)
-    this.openModal = this.openModal.bind(this)
   }
 
   async componentDidMount() {
@@ -64,11 +63,6 @@ class GameLobby extends Component {
 
   async openModal() {
     $('#solved').modal('open')
-    // let numCopy = this.randomNums()
-    // let suitCopy = this.randomSuits()
-    // await this.props.createDBGame(numCopy, suitCopy)
-    // await this.props.getCurrentGame()
-    // socket.emit('setGame', this.props.game.numbers, this.props.game.suits)
   }
 
   async submitSolution() {
@@ -128,6 +122,7 @@ class GameLobby extends Component {
         {this.props.game.winner !== '' && this.props.game.winner !== null && (
           <div>
             {this.props.game.winner} solved it with the solution:
+            <br />
             {this.props.game.solution}
           </div>
         )}
