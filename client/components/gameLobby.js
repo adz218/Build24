@@ -15,7 +15,8 @@ import {
   Icon,
   Table,
   Card as MatCard,
-  Col
+  Col,
+  Toast
 } from 'react-materialize'
 
 class GameLobby extends Component {
@@ -78,8 +79,9 @@ class GameLobby extends Component {
         if (parsedIntsCount < 4) {
           parsedIntsCount += 1
           numbersCopy.splice(numbersCopy.indexOf(parseInt(solutionCopy[i])), 1)
+        } else {
+          bool = false
         }
-        bool = false
       }
     }
     if (solution === 24 && numbersCopy.length === 0 && bool) {
@@ -111,13 +113,6 @@ class GameLobby extends Component {
 
     return (
       <div>
-        {this.props.game.winner !== '' && this.props.game.winner !== null && (
-          <div>
-            {this.props.game.winner} solved it with the solution:
-            <br />
-            {this.props.game.solution}
-          </div>
-        )}
         <div className="buttons-bar">
           <Button
             onClick={async () => {
@@ -180,7 +175,6 @@ class GameLobby extends Component {
                 />
               </svg>
               <p>
-                {' '}
                 Valid Solutions: <br />
                 5 * 4 + 1 + 3 <br />
                 (5 + 3) * (4 - 1) <br />
@@ -238,6 +232,12 @@ class GameLobby extends Component {
                 }}
               />
             </svg>
+          )}
+          {this.props.game.winner !== '' && this.props.game.winner !== null && (
+            <div>
+              {this.props.game.winner} solved it with the solution:
+              {this.props.game.solution}
+            </div>
           )}
         </div>
         <div className="solution-field">
