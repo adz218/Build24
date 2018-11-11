@@ -87,7 +87,9 @@ class GameLobby extends Component {
           parsedIntsCount += 1
           numbersCopy.splice(numbersCopy.indexOf(parseInt(solutionCopy[i])), 1)
         } else {
+          console.log()
           bool = false
+          //check
         }
       }
     }
