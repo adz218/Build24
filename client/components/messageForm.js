@@ -10,14 +10,11 @@ class MessageForm extends Component {
 
   submitMessage(event) {
     event.preventDefault()
-    console.log('sending this', {
-      message: event.target.message.value,
-      user: this.props.user.email || 'Guest Player'
-    })
     socket.emit('send-message', {
       message: event.target.message.value,
       user: this.props.user.email || 'Guest Player'
     })
+    event.target.message.value = ''
   }
 
   render() {

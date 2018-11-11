@@ -178,7 +178,7 @@ class GameLobby extends Component {
                 Valid Solutions: <br />
                 5 * 4 + 1 + 3 <br />
                 (5 + 3) * (4 - 1) <br />
-                Invalid Solution: <br />
+                Invalid Solution (uses a card twice): <br />
                 (5 * 3) + 4 + 1 + 4 <br />
               </p>
             </div>
@@ -262,12 +262,10 @@ class GameLobby extends Component {
         </div>
 
         <div>
-          <Col m={12} s={12}>
-            <MatCard className="teal lighten-4 black-text" title="Message Log">
-              <MessageLog />
-              <MessageForm />
-            </MatCard>
-          </Col>
+          <MatCard className="teal lighten-4 black-text" title="Message Log">
+            <MessageLog />
+            <MessageForm />
+          </MatCard>
         </div>
       </div>
     )

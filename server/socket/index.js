@@ -7,13 +7,11 @@ module.exports = io => {
     })
 
     socket.on('setGame', (nums, suits) => {
-      console.log('nums and suits', nums, suits)
       io.emit('setGame', [[...nums], [...suits]])
     })
 
     socket.on('winner', (winner, solution) => {
       const arg = [winner, solution]
-      console.log('arg being emit from server back to clients', arg)
       io.emit('winner', arg)
     })
 

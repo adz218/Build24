@@ -9,7 +9,6 @@ socket.on('connect', () => {
   console.log('Connected!')
 
   socket.on('setGame', numsAndSuits => {
-    console.log('client listener hit', numsAndSuits)
     store.dispatch(setGame(numsAndSuits))
   })
 
@@ -17,12 +16,10 @@ socket.on('connect', () => {
     store.dispatch(clearState())
   })
   socket.on('newPlayer', () => {
-    console.log('client listener hit for new player')
     store.dispatch(getPlayers())
   })
 
   socket.on('send-message', msgAndUser => {
-    console.log('new msg received from a client', msgAndUser)
     store.dispatch(addMessage(msgAndUser))
   })
 
