@@ -32,6 +32,10 @@ form div {
   justify-content: center;
 }
 
+.scroll {
+  overflow: scroll;
+  height: 200px;
+}
 /* .message-and-user {
   display: flex;
   flex-direction: row;

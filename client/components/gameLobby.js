@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
@@ -70,6 +71,7 @@ class GameLobby extends Component {
   async submitSolution() {
     const solution = eval(this.state.solution)
 
+    if (!eval(this.state.solution)) this.setState({solution: 'Invalid input'})
     const numbersCopy = [...this.props.game.numbers]
     const solutionCopy = this.state.solution.split(' ')
 
@@ -98,6 +100,13 @@ class GameLobby extends Component {
         this.props.user.email || 'Guest Player',
         this.state.solution
       )
+      this.setState({solution: `${this.state.solution} works. Good Job!`})
+    } else {
+      this.setState({
+        solution: `Your solution: ${
+          this.state.solution
+        } is incorrect :( clear and try again!`
+      })
     }
 
     console.log('dont be cheatin now')
@@ -242,6 +251,7 @@ class GameLobby extends Component {
               {this.props.game.solution}
             </div>
           )}
+          {this.state.solution === 'incorrect' && <div>Invalid Solution</div>}
         </div>
         <div className="solution-field">
           <input
