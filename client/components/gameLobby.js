@@ -16,7 +16,10 @@ import {
   Table,
   Card as MatCard,
   Col,
-  Toast
+  Collection,
+  CollectionItem,
+  Tabs,
+  Tab
 } from 'react-materialize'
 
 class GameLobby extends Component {
@@ -235,7 +238,7 @@ class GameLobby extends Component {
           )}
           {this.props.game.winner !== '' && this.props.game.winner !== null && (
             <div>
-              {this.props.game.winner} solved it with the solution:
+              {this.props.game.winner} solved this set with the solution:
               {this.props.game.solution}
             </div>
           )}
@@ -261,11 +264,24 @@ class GameLobby extends Component {
           <Button onClick={() => this.clearState()}>Clear Solution</Button>
         </div>
 
-        <div>
-          <MatCard className="teal lighten-4 black-text" title="Message Log">
-            <MessageLog />
-            <MessageForm />
-          </MatCard>
+        <div className="message-and-user">
+          <Tabs>
+            <Tab title="Message Log" active>
+              <MatCard className="teal lighten-4">
+                <MessageLog />
+                <MessageForm />
+              </MatCard>
+            </Tab>
+            <Tab title="Users">
+              <MatCard className="teal lighten-4">
+                <Collection>
+                  {this.props.players.map(player => {
+                    return <CollectionItem>{player.email}</CollectionItem>
+                  })}
+                </Collection>
+              </MatCard>
+            </Tab>
+          </Tabs>
         </div>
       </div>
     )

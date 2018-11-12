@@ -31,3 +31,17 @@ form div {
   flex-direction: row;
   justify-content: center;
 }
+
+/* .message-and-user {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.messages {
+  flex-grow: 3;
+}
+
+.users {
+  flex-grow: 1;
+} */
